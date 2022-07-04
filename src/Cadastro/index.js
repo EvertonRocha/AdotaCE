@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, Text, TextInput, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import {styles} from '../Estilos/ECadastro';
 import firebase from '../config/firebaseConfig';
-import { useNavigation } from '@react-navigation/native';
 
-export default function Cadastro(){
-
-  const navigation = useNavigation();
+export default function Cadastro({navigation}){
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   async function cadastrar(){
     await firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then((value) => {
-      alert('Usuário criado com sucesso: '+ value.user.email);
+    .then(() => {
       setEmail('');
       setPassword('');
-      navigation.navigate('Login');
+      navigation.navigate('Feed');
     })
     .catch((error) => {
       if(error.code === 'auth/weak-password'){
@@ -36,28 +32,31 @@ export default function Cadastro(){
     
   }
   return(
-    <View style={styles.container}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}style={styles.container} keyboardVerticalOffset={50}>
+        <View>
+          <Image source={require('../../assets/logo.png')} style={styles.imagemLogo}/>
 
-      <View>
-        <Image source={require('../../assets/logo.png')} style={styles.imagemLogo}/>
+          <Image source={require('../../assets/cat-register-animation.gif')} style={styles.animation}/>
+        </View>
 
-        <Image source={require('../../assets/cat-register-animation.gif')} style={styles.animation}/>
-      </View>
+        <View style={styles.inputBox}>
+          <Text style={styles.textInformation}>Cadastro</Text>
+          <KeyboardAvoidingView behavior='padding'>
+            <TextInput placeholder='Digite seu email' style={styles.input} onChangeText={text => setEmail(text)} value={email}/>
+            <TextInput placeholder='Digite sua senha' style={styles.input} onChangeText={text => setPassword(text)} value={password} secureTextEntry/>
+          </KeyboardAvoidingView>
+        </View>
 
-      <View style={styles.inputBox}>
-        <Text style={styles.textInformation}>Cadastro</Text>
-        <TextInput placeholder='Digite seu email' style={styles.input} onChangeText={text => setEmail(text)} value={email}/>
-        <TextInput placeholder='Digite sua senha' style={styles.input} onChangeText={text => setPassword(text)} value={password}/>
-      </View>
-
-      <View style={styles.buttonBox}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.button}>Voltar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => cadastrar()}>
-          <Text style={styles.button}>Cadastrar</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+        <View style={styles.buttonBox}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Text style={styles.button}>Voltar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => cadastrar()}>
+            <Text style={styles.button}>Cadastrar</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
   );
 }
+
+// const keyboardVerticalOffset = Platform.OS === 'ios' ? 40 : 0;

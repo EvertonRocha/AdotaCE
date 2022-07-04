@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import {SafeAreaView, View, Text, TouchableOpacity, FlatList, Image, ActivityIndicator, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, ScrollView, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { styles } from '../Estilos/EFeed';
+import { styles } from '../Estilos/EMeusPosts';
 import firebase from '../config/firebaseConfig';
 
-export default function Feed({navigation}){
+export default function MeusPosts({navigation}){
 
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [dados, setDados] = useState([]);
 
-  async function deslogar(){
-    await firebase.auth().signOut()
-    .then(() => navigation.navigate('Login'));
+  async function deletarPost(key){
+    await firebase.database().ref('Post').child(key).remove();
   }
+
   useEffect(() => {
 
-    async function dados(){
+    let userId = firebase.auth().currentUser.uid;
 
-      await firebase.database().ref('Post').on('value', (snapshot) => {
-        setPosts([]);
+    async function mostrarPostsPorUserUid(){  
+      await firebase.database().ref('Post').orderByChild('idUser').equalTo(userId).on('value', (snapshot) => {
+        setDados([]);
 
         snapshot.forEach((childItem) => {
           let data = {
@@ -37,19 +37,18 @@ export default function Feed({navigation}){
             dataPost: childItem.val().dataPost             
           };
 
-          setPosts(oldArray => [...oldArray, data]);
-        })
+          setDados(oldArray => [...oldArray, data]);
+        });
       })
-
     }
-    dados();
-    setLoading(false);
-  }, []);
+
+    mostrarPostsPorUserUid();
+    
+  }, [])
 
   const renderItem = ({item}) => {
     return(
-      <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate('DetalhesPost', 
-      {
+      <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate('DetalhesPost', {
         key: item.key,
         fotoPet: item.fotoPet,
         tipoPet: item.tipoPet,
@@ -91,7 +90,24 @@ export default function Feed({navigation}){
                 </View>
               </View>
               <View style={styles.descricaoIcones}>
-                <Icon name='heart-o' size={25} color='#615046'/>
+                <TouchableOpacity onPress={() => navigation.navigate('EdicaoPost', {
+                  key: item.key,
+                  fotoPet: item.fotoPet,
+                  tipoPet: item.tipoPet,
+                  sexo: item.sexo,
+                  raca: item.raca,
+                  nomePet: item.nomePet,
+                  nomeDoador: item.nomeDoador,
+                  idade: item.idade,
+                  endereco: item.endereco,
+                  descricao: item.descricao,
+                  dataPost: item.dataPost,
+                  contato: item.contato,
+                  dataPost: item.dataPost
+                })}>
+                  <Icon name='pencil' size={25} color='#615046'/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => deletarPost(item.key)}><Icon name='trash-o' size={25} color='#615046'/></TouchableOpacity>
               </View>
             </View>
           </View>
@@ -102,37 +118,17 @@ export default function Feed({navigation}){
 
   return(
     <View style={styles.container}>
-      <View style={styles.menuTopo}>
-        <View style={styles.boxMenu}>
-          <TouchableOpacity onPress={() => deslogar()}>
-            <Icon name='sign-out' size={25} color='#615046'/>
-            <Text>Sair</Text>
-          </TouchableOpacity>
-          <Image source={require('../../assets/logo.png')} style={styles.logo}/>
-          <TouchableOpacity onPress={() => navigation.navigate('MeusPosts')}> 
-            <Icon name='archive' size={25} color='#615046' style={{alignSelf: 'center'}}/>
-            <Text>Posts</Text>
-          </TouchableOpacity>
+        <View style={styles.title}>
+          <Text style={styles.textTitle}>Aqui você pode:</Text>
+          <Text>Visualizar, editar ou excluir seus posts</Text>
         </View>
-      </View>
-      {loading ? 
-      (
-        <ActivityIndicator color='#615046' size={45}/>
-      )
-        :
-      (
         <FlatList 
-        data={posts}
-        style={{width: '95%'}}
-        removeClippedSubviews={true}
-        keyExtractor={item => item.key}
-        renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+          data={dados}
+          removeClippedSubviews={true}
+          keyExtractor={item => item.key}
+          renderItem={renderItem}
         />
-      )  
-      }
-      <TouchableOpacity style={styles.botaoNovoPost} onPress={() => navigation.navigate('NovoPost')}>
-        <Text style={styles.iconeBotao}>+</Text>
-      </TouchableOpacity>
     </View>
   );
 }

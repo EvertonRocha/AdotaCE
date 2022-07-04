@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f0e5',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   imagemLogo: {
     width: 160,
@@ -13,28 +13,32 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   animation: {
-    width: 300,
-    height: 300,
-    marginBottom: 20
+    width: 350,
+    height: 350,
+    // marginBottom: 20
   },
   input: {
     backgroundColor: '#c9a692',
     marginBottom: 10,
     paddingLeft: 10,
-    borderRadius: 100,
-    color: '#323232'
+    borderRadius: 50,
+    color: '#323232',
+    height: 50
   },
   inputBox: {
     width: '90%',
+    marginTop: 20,
   },
   textInformation: {
     marginBottom: 5,
-    marginLeft: 10
+    marginLeft: 10,
+    color: '#777'
   },
   buttonBox: {
     width: '90%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 10,
   },
   button: {
     fontSize: 15,

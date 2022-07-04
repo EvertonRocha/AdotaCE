@@ -4,24 +4,46 @@ const styles = StyleSheet.create({
 
 container: {
   flex: 1,
-  backgroundColor: '#fff',
+  backgroundColor: '#e1e6e2',
   alignItems: 'center',
 },
+menuTopo: {
+  width: '100%',
+  height: 110,
+  backgroundColor: 'grey',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  backgroundColor: '#c9a692'
+  // paddingBottom: 10
+},
+boxMenu: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  // backgroundColor: 'lightblue',
+  width: '90%',
+  justifyContent: 'space-between'
+},
+logo: {
+  width: 90,
+  height: 90,
+  // backgroundColor: 'red'
+},  
 botaoNovoPost: {
   width: 60,
   height: 60,
   position: 'absolute',
   bottom: 20,
-  left: 20,
+  right: 20,
   borderRadius: 50,
   justifyContent: 'center',
   alignItems: 'center',
   backgroundColor: '#615046'
 },
 iconeBotao: {
-  fontSize: 20,
+  fontSize: 25,
   fontWeight: 'bold',
-  color: '#fff'
+  color: '#fff',
+  paddingBottom: 10
 },
 post: {
   marginTop: 20,
@@ -29,7 +51,7 @@ post: {
 },
 imagemPost: {
   width: 'auto',
-  height: 300,
+  height: 350,
   borderTopLeftRadius: 15,
   borderTopRightRadius: 15
 },
@@ -53,6 +75,12 @@ caixaDescricao: {
   borderBottomLeftRadius: 15,
   borderBottomRightRadius: 15,
 },
+itemDescricao: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  width: 300,
+  // backgroundColor: 'red'
+},
 descricaoIcones: {
   flexDirection: 'row',
   alignItems: 'flex-end',
@@ -60,7 +88,8 @@ descricaoIcones: {
 textoInformacao: {
   fontSize: 15,
   color: '#615046',
-  marginBottom: 2,
+  marginBottom: 5,
+  marginLeft: 10
   // fontWeight: 'bold'
 }
 });
