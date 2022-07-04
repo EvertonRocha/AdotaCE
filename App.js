@@ -1,20 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import Login from './src/Login';
+import Cadastro from './src/Cadastro';
+import Feed from './src/Feed';
+import NovoPost from './src/NovoPost';
+
+const Stack = createNativeStackNavigator();
+
+console.disableYellowBox = true;
+
+function NavegacaoTelas() {
+  return(
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name='Login' component={Login}/>
+        <Stack.Screen name='Cadastro' component={Cadastro} />
+        <Stack.Screen name='Feed' component={Feed} />
+        <Stack.Screen name='Novo Post' component={NovoPost} />
+      </Stack.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App(){
+  return(
+    <NavigationContainer>
+      <NavegacaoTelas />
+    </NavigationContainer>
+  );
+}
